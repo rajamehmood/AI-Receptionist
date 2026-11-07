@@ -1,0 +1,597 @@
+{
+  "name": "AI Receptionist",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "67734cd7-226e-45ac-82bb-230b861fc7b1",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        -672,
+        -272
+      ],
+      "id": "cc7d4000-f5b5-4523-b757-69152d70e52d",
+      "name": "Webhook",
+      "webhookId": "67734cd7-226e-45ac-82bb-230b861fc7b1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "91516a52-c04b-4d72-88b0-b08fc84a3a0d",
+              "name": "customer_name",
+              "value": "{{ $json.body.customer_name }}",
+              "type": "string"
+            },
+            {
+              "id": "7865df1e-5b9f-4266-a14f-bc30a3d8f86b",
+              "name": "Phone",
+              "value": "={{ $json.body.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "6a1edbfb-9c48-45ad-95ad-e489405f357d",
+              "name": "email",
+              "value": "={{ $json.body.email }}",
+              "type": "string"
+            },
+            {
+              "id": "3cb1bbe0-1662-4d0b-a212-7ea1d30f7dbf",
+              "name": "Service",
+              "value": "={{ $json.body.service }}",
+              "type": "string"
+            },
+            {
+              "id": "47b4f319-1246-4d84-9dba-5e754a56b262",
+              "name": "Problem",
+              "value": "={{ $json.body.problem }}",
+              "type": "string"
+            },
+            {
+              "id": "4f4aeca3-fe48-4fbb-8864-ae11f3c3c892",
+              "name": "Address",
+              "value": "{{ $json.body.address }}",
+              "type": "string"
+            },
+            {
+              "id": "777d37ff-bc55-4046-b8a2-388bb645cb44",
+              "name": "City",
+              "value": "={{ $json.body.city }}",
+              "type": "string"
+            },
+            {
+              "id": "33b0b7b0-30f7-46ff-8cdf-74c8b2140f79",
+              "name": "Urgency",
+              "value": "={{ $json.body.urgency }}",
+              "type": "string"
+            },
+            {
+              "id": "d094c0cc-5b64-4ca7-bce1-0584c3f66431",
+              "name": "preferred_date",
+              "value": "={{ $json.body.preferred_date }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -464,
+        -304
+      ],
+      "id": "728248d8-6f9d-4433-aaba-f1180b3a795f",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "3f12eb8e-4f35-4894-909a-ee64d5e37422",
+              "leftValue": "={{ $json.customer_name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "a3247390-5fd9-4905-93cb-46dad0e54028",
+              "leftValue": "={{ $json.phone }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "92fbf1d3-6cc4-481e-8e95-1dca870247dc",
+              "leftValue": "={{ $json.service }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "6fabe389-6d03-408d-8588-47cedc885609",
+              "leftValue": "={{ $json.problem }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "6df05d03-f56c-48c3-9251-491d9d0f17b4",
+              "leftValue": "={{ $json.address }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        -432,
+        -64
+      ],
+      "id": "66650690-5c05-4d8b-96c1-b7efc547d0f6",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "mehmod7373@gmail.com",
+        "subject": "={{ 'New Customer Lead - ' + $json.customer_name + ' - ' + $json.service }}",
+        "message": "={{\n'<h2>New Customer Lead Received!</h2>' +\n'<p>Hello Business Owner,</p>' +\n'<p>A new customer service request has been received by your AI Receptionist.</p>' +\n'<h3>Customer Information</h3>' +\n'<p><b>Name:</b> ' + $json.customer_name + '</p>' +\n'<p><b>Phone:</b> ' + $json.phone + '</p>' +\n'<p><b>Email:</b> ' + ($json.email || 'Not provided') + '</p>' +\n'<h3>Service Details</h3>' +\n'<p><b>Service:</b> ' + $json.service + '</p>' +\n'<p><b>Problem:</b> ' + $json.problem + '</p>' +\n'<p><b>Address:</b> ' + $json.address + '</p>' +\n'<p><b>City:</b> ' + $json.city + '</p>' +\n'<p><b>Urgency:</b> ' + $json.urgency + '</p>' +\n'<p><b>Preferred Date:</b> ' + $json.preferred_date + '</p>' +\n'<h3>Call Summary</h3>' +\n'<p>' + ($json.call_summary || 'No summary available') + '</p>' +\n'<p><b>Status:</b> NEW</p>' +\n'<hr><p>Regards,<br>AI Receptionist System</p>'\n}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        304,
+        -128
+      ],
+      "id": "3120d025-21c8-4fb4-af80-e22fc0c57b35",
+      "name": "Send a message",
+      "webhookId": "e718b776-aaeb-41ef-9ccb-104f4806a8f0",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "6PxGU2iOqU7aF8yO",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{\n  {\n    success: true,\n    message: \"Customer lead successfully saved.\",\n    status: \"New\",\n    customer_name: $json.customer_name,\n    service: $json.service\n  }\n}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        352,
+        -352
+      ],
+      "id": "4689cdae-1186-4679-876f-a9ddda7b4488",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.service }}",
+                    "rightValue": "HVAC",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "b0c7895e-f9ed-4a08-b225-19ed2d92f142"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "8ba51bb9-25b7-4745-924b-3f59c86a2e41",
+                    "leftValue": "={{ $json.service }}",
+                    "rightValue": "AC Repair",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "a7337536-0520-4fc0-9d9c-d6e8f9279990",
+                    "leftValue": "={{ $json.service }}",
+                    "rightValue": "Plumbing",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "902e3c44-576e-445c-942e-5a67bb84c55e",
+                    "leftValue": "={{ $json.service }}",
+                    "rightValue": "Electrical",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "c2e1ee73-87a0-4c7f-b58d-f22d65c190c1",
+                    "leftValue": "={{ $json.service }}",
+                    "rightValue": "Roofing",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "7867a449-29d3-4632-b79c-c22668935106",
+                    "leftValue": "={{ $json.service }}",
+                    "rightValue": "Cleaning",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.5,
+      "position": [
+        -160,
+        -176
+      ],
+      "id": "bd34b0b9-ecf1-475b-8741-613a663a355a",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1UT_89XDSEYZ0AUf7RT9f4tPt2lcYghQ6_wQA3WQ-xXg",
+          "mode": "list",
+          "cachedResultName": "AI Receptionist",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1UT_89XDSEYZ0AUf7RT9f4tPt2lcYghQ6_wQA3WQ-xXg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "AI Receptionist",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1UT_89XDSEYZ0AUf7RT9f4tPt2lcYghQ6_wQA3WQ-xXg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "customer_name": "={{ $json.customer_name }}",
+            "           Phone": "={{ $json.phone }}",
+            "               email": "={{ $json.email }}",
+            "            Service": "={{ $json.service }}",
+            "                       Problem": "={{ $json.problem }}",
+            "          Address": "={{ $json.address }}",
+            "            City": "={{ $json.city }}",
+            "        Urgency": "={{ $json.urgency }}",
+            "    preferred_date": "={{ $json.preferred_date }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "customer_name",
+              "displayName": "customer_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "           Phone",
+              "displayName": "           Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "               email",
+              "displayName": "               email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "            Service",
+              "displayName": "            Service",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "                       Problem",
+              "displayName": "                       Problem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "          Address",
+              "displayName": "          Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "            City",
+              "displayName": "            City",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "        Urgency",
+              "displayName": "        Urgency",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "    preferred_date",
+              "displayName": "    preferred_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        48,
+        -304
+      ],
+      "id": "0e555181-86dd-4b12-9b7f-049541ef209b",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YI9kcZiMncrUmkey",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Append or update row in sheet": [
+      {
+        "json": {
+          "name": "First item",
+          "code": 1
+        }
+      },
+      {
+        "json": {
+          "name": "Second item",
+          "code": 2
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "dac480c2-2d1e-401e-ba85-9c77bde78235",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "bd3e55fbb5d95d198cef977f953474c4212468e8f2bfcf75f31aee61792b8cab"
+  },
+  "nodeGroups": [],
+  "id": "EtoRVKRUvnqtIckx",
+  "tags": []
+}
